@@ -1,7 +1,7 @@
 {
   "C_Cpp.intelliSenseEngine": "default",
   "idf.espIdfPath": "/home/falcon/.espressif/v5.5.2/esp-idf/v5.5.2/esp-idf",
-  "idf.pythonInstallPath": "/home/falcon/.espressif/python_env/idf5.5_py3.11_env/bin/python3",
+  "idf.pythonInstallPath": "d:\\.esp32\\tools\\idf-python\\3.11.2\\python.exe",
   "idf.openOcdConfigs": [
     "board/esp32-wrover-kit-3.3v.cfg"
   ],
@@ -16,5 +16,6 @@
     "--query-driver=**",
     "--compile-commands-dir=/media/falcon/books/esp-idf_codium_projects/oled_32/build"
   ],
-  "idf.flashType": "UART"
+  "idf.flashType": "UART",
+  "idf.portWin": "COM4"
 }
