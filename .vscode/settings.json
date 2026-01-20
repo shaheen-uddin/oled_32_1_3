@@ -1,7 +1,7 @@
 {
   "C_Cpp.intelliSenseEngine": "default",
   "idf.espIdfPath": "/home/falcon/.espressif/v5.5.2/esp-idf/v5.5.2/esp-idf",
-  "idf.pythonInstallPath": "d:\\.esp32\\tools\\idf-python\\3.11.2\\python.exe",
+  "idf.pythonInstallPath": "/home/falcon/.espressif/python_env/idf5.5_py3.11_env/bin/python",
   "idf.openOcdConfigs": [
     "board/esp32-wrover-kit-3.3v.cfg"
   ],

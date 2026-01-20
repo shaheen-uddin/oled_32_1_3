@@ -152,10 +152,17 @@ void debug_draw_char_terminal(uint8_t x, uint8_t y, char c)
             // Math for the buffer
             int byte_index = (y + j) / 8 * OLED_WIDTH + (x + i);
             int bit_index = (y + j) % 8;
-
-            printf("\nbyte_index = (x=%d + y=%d) / 8 * SSD1306_WIDTH + (x=%d + i=%d): %d\n", x, y, x, i, byte_index);
-            printf("bit_index = (y =%d + j=%d) modulo 8: %d\n", y, j, bit_index);
-            printf("byte_index :%d, bit_index: %d\n", byte_index, bit_index);
+          printf("================Current Column(vertical row) index: %d =====================", j);
+            printf("\n\n============(Status) glyph[%d]  &  (1 << %d) = (", i, j);
+            print_bin(current_col);
+            printf(" & ");
+            print_bin(mask);
+            printf(") = ");
+            print_bin(is_pixel_on);
+            printf("\n");
+            printf("\nbyte_index : (%d + %d) + %d x %d + (%d + %d)) = %d\n",  y, j, 8, OLED_WIDTH, x, i, byte_index);
+            printf("bit_index : (%d + %d) mod %d = %d\n", y, j, 8,  bit_index);
+           // printf("byte_index :%d, bit_index: %d\n", byte_index, bit_index);
 
             if (is_pixel_on)
             {
@@ -167,7 +174,46 @@ void debug_draw_char_terminal(uint8_t x, uint8_t y, char c)
                 uint8_t before = buffer[byte_index];
                 uint8_t mask = (uint8_t)(1 << bit_index);
 
-                printf("byte[%d]\n", byte_index);
+                printf("byte_index: [%d]\n", byte_index);
+                printf("bit_index: [%d]\n", bit_index);
+
+                printf("  before  (buffer[byte_index]) = ");
+                print_bin(before);
+                printf(" (0x%02X) = %d\n", before, before);
+
+                printf("  mask   = ");
+                print_bin(mask);
+                printf(" (1 << %d)\n", bit_index);
+
+                printf("\n buffer[%d] |= (1 << %d)= ", byte_index, bit_index);
+                print_bin(before);
+                printf(" =| ");
+                print_bin(mask);
+
+                buffer[byte_index] |= mask;
+
+                printf(" \n after ( buffer[byte_index] |= mask):  = ");
+                print_bin(buffer[byte_index]);
+                printf(" (0x%02X) = %d\n", buffer[byte_index], buffer[byte_index]);
+                printf("==================debug ends=====================");
+                /*==============debug ends=====================*/
+                // buffer[byte_index] |= (1 << bit_index);
+                printf("\n\nPostion: (%d, %d)", x, y);
+                printf("  [BIT %d: ON ] ", j);
+                printf("Mask: ");
+                print_bin(mask);
+                printf(" -> Buffer[%d], (bit_index)flip bit %d\n", byte_index, bit_index);
+                  printf("\n================Current Column(vertical row) index: %d ends here =====================\n\n", j);
+            }
+            else
+            {
+                 /*==================debug if bit is off=====================
+                printf("\n==================debug (if bit is off)=====================\n");
+                uint8_t before = buffer[byte_index];
+                uint8_t mask = (uint8_t)(1 << bit_index);
+
+                printf("byte_index: [%d]\n", byte_index);
+                printf("bit_index: [%d]\n", bit_index);
 
                 printf("  before = ");
                 print_bin(before);
@@ -182,23 +228,14 @@ void debug_draw_char_terminal(uint8_t x, uint8_t y, char c)
                 printf("  after  = ");
                 print_bin(buffer[byte_index]);
                 printf(" (0x%02X)\n", buffer[byte_index]);
-                printf("==================debug ends=====================");
-                /*==============debug ends=====================*/
-                // buffer[byte_index] |= (1 << bit_index);
-                printf("\nPostion: (%d, %d)", x, y);
-                printf("  [BIT %d: ON ] ", j);
-                printf("Mask: ");
-                print_bin(mask);
-                printf(" -> Buffer[%d], flip bit %d\n", byte_index, bit_index);
-            }
-            else
-            {
+                printf("==================debug (if bit is off)ends=====================");
+                *==============debug ends (if bit is off) ends=====================*/
                 printf("Postion: (%d, %d)", x, y);
                 printf("  [BIT %d: OFF] ", j);
                 printf("Mask: ");
                 print_bin(mask);
-                printf(" -> Buffer[%d],  off bit %d (Skip)\n", byte_index, bit_index);
-                // printf(" -> (Skip)\n");
+                printf(" -> Buffer[%d],  off-bit %d (Skip)\n", byte_index, bit_index);
+                printf("================Current Column(vertical row) index: %d ends here =====================\n\n", j);
             }
         }
     }
