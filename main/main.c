@@ -289,7 +289,9 @@ void app_main(void)
     sh1106_init();
 
     oled_clear();
-    oled_draw_string(0, 0, "Hello, World!");
+    oled_draw_string(20, 25, "Hello, World!");
+    oled_draw_string(20, 27+8, "From Shaheen!");
+
     sh1106_update();
 
     ESP_LOGI(TAG, "Done");
