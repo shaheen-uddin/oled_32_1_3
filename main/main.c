@@ -152,7 +152,11 @@ void debug_draw_char_terminal(uint8_t x, uint8_t y, char c)
             // Math for the buffer
             int byte_index = (y + j) / 8 * OLED_WIDTH + (x + i);
             int bit_index = (y + j) % 8;
-            printf("\t================Current Column(vertical row) index: (%d, %d)  =====================", i, j);
+            uint8_t bf = buffer[byte_index];
+            printf("\nBefore check & update : buffer[%d] = ", byte_index); // decimal: %d, binary:  ", byte_index, bf)
+            print_bin(bf);
+            printf(" (binary), %d (decimal)", bf);
+            printf("\n\n\t================Current row(in vertical column) index: buffer[%d][%d]  =====================", i, j);
             printf("\n\n\t\t============(Status) glyph[%d]  &  (1 << %d) = (", i, j);
             print_bin(current_col);
             printf(" & ");
@@ -160,28 +164,25 @@ void debug_draw_char_terminal(uint8_t x, uint8_t y, char c)
             printf(") = ");
             print_bin(is_pixel_on);
             printf("\n");
-            printf("\n\t\tbyte_index : (%d + %d) + %d x %d + (%d + %d)) = %d\n",  y, j, 8, OLED_WIDTH, x, i, byte_index);
-            printf("\t\tbit_index : (%d + %d) mod %d = %d\n", y, j, 8,  bit_index);
-           // printf("byte_index :%d, bit_index: %d\n", byte_index, bit_index);
+            printf("\n\t\tbyte_index : (%d + %d) + %d x %d + (%d + %d)) = %d\n", y, j, 8, OLED_WIDTH, x, i, byte_index);
+            printf("\t\tbit_index : (%d + %d) mod %d = %d\n", y, j, 8, bit_index);
+            // printf("byte_index :%d, bit_index: %d\n", byte_index, bit_index);
 
             if (is_pixel_on)
             {
-                buffer[byte_index] |= (1 << bit_index);
-                printf("\n\t\t=====Value: buffer[byte_index] |= (1 << bit_index) ====== ");
+                printf("\n\t\t===== buffer[byte_index] |= (1 << bit_index) ====== ");
                 // print_bin(buffer[byte_index]);
                 /*==================debug=====================*/
                 printf("\n\t\t==================debug=====================\n");
                 uint8_t before = buffer[byte_index];
                 uint8_t mask = (uint8_t)(1 << bit_index);
+                // buffer[byte_index] |= (1 << bit_index);
 
-                printf("\t\tbyte_index: [%d]\n", byte_index);
-                printf("\t\tbit_index: [%d]\n", bit_index);
-
-                printf("\t\t before  (buffer[byte_index]) = ");
+                printf("\t\tBefore Update (buffer[%d]) = ", byte_index);
                 print_bin(before);
                 printf("\t\t(0x%02X) = %d\n", before, before);
 
-                printf("\t\tmask   = ");
+                printf("\t\tMask   = ");
                 print_bin(mask);
                 printf("\t\t(1 << %d)\n", bit_index);
 
@@ -189,52 +190,28 @@ void debug_draw_char_terminal(uint8_t x, uint8_t y, char c)
                 print_bin(before);
                 printf(" =| ");
                 print_bin(mask);
+                printf(" = ");
+                print_bin(buffer[byte_index] |= mask);
 
-                buffer[byte_index] |= mask;
-
-                printf(" \n\t\t after ( buffer[byte_index] |= mask):  = ");
-                print_bin(buffer[byte_index]);
+                /*   printf(" \n\t\tAfter Update( buffer[%d] |= mask)  =  ", byte_index );
+                  print_bin(buffer[byte_index]); */
                 printf("\t\t(0x%02X) = %d\n", buffer[byte_index], buffer[byte_index]);
                 printf("\t\t==================debug ends=====================");
                 /*==============debug ends=====================*/
                 // buffer[byte_index] |= (1 << bit_index);
-                printf("\n\n\t\tPostion: (%d, %d)", x, y);
-                printf("  [BIT %d: ON ] ", j);
-                printf("Mask: ");
-                print_bin(mask);
-                printf("\t\t -> Buffer[%d], (bit_index)flip bit %d\n", byte_index, bit_index);
-                  printf("\n\t================Current Column(vertical row) index: %d ends here =====================\n\n", j);
+                printf("\n\n\t\tPostion: (x, y) = (%d, %d)", x, y);
+                printf("\t\t -> Buffer[%d][%d] : ON \n", byte_index, bit_index);
+                printf("\n\t================Current row(in vertical column) index: buffer[%d][%d] ends here =====================\n\n", i,j);
             }
             else
             {
-                 /*==================debug if bit is off=====================
-                printf("\n==================debug (if bit is off)=====================\n");
-                uint8_t before = buffer[byte_index];
-                uint8_t mask = (uint8_t)(1 << bit_index);
-
-                printf("byte_index: [%d]\n", byte_index);
-                printf("bit_index: [%d]\n", bit_index);
-
-                printf("  before = ");
-                print_bin(before);
-                printf(" (0x%02X)\n", before);
-
-                printf("  mask   = ");
-                print_bin(mask);
-                printf(" (1 << %d)\n", bit_index);
-
-                buffer[byte_index] |= mask;
-
-                printf("  after  = ");
-                print_bin(buffer[byte_index]);
-                printf(" (0x%02X)\n", buffer[byte_index]);
-                printf("==================debug (if bit is off)ends=====================");
-                *==============debug ends (if bit is off) ends=====================*/
-                printf("\t\tPostion: (%d, %d)", x, y);
+                printf("\t\tbyte_value: buffer[%d] = ", byte_index);
+                print_bin( buffer[byte_index]);
+                printf(", Postion: (x, y): (%d, %d)", x, y);
                 printf("  [BIT %d: OFF] ", j);
                 printf("Mask: ");
                 print_bin(mask);
-                printf("\t\t-> Buffer[%d],  off-bit %d (Skip)\n", byte_index, bit_index);
+                printf("\t\t-> Buffer[%d][%d] :  OFF\n", byte_index, bit_index);
                 printf("\t================Current Column(vertical row) index: %d ends here =====================\n\n", j);
             }
         }
